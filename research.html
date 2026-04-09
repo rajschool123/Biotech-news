@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biotech Research & AI Assistant</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; color: #333; }
+        nav { background-color: #2c3e50; padding: 15px; text-align: center; }
+        nav a { color: white; text-decoration: none; margin: 0 15px; font-weight: bold; font-size: 1.1rem; }
+        nav a:hover { color: #27ae60; }
+        
+        .header-section { text-align: center; margin: 40px 0 20px 0; }
+        .header-section h1 { color: #2c3e50; font-size: 2.5rem; margin-bottom: 10px; }
+        .header-section p { color: #7f8c8d; font-size: 1.1rem; margin-bottom: 20px;}
+        
+        /* Search Bar Styling */
+        .search-container { text-align: center; margin-bottom: 40px; }
+        .search-input { padding: 12px 20px; font-size: 1rem; width: 60%; max-width: 500px; border: 2px solid #bdc3c7; border-radius: 30px 0 0 30px; outline: none; }
+        .search-input:focus { border-color: #2980b9; }
+        .search-btn { padding: 12px 25px; font-size: 1rem; background-color: #2980b9; color: white; border: 2px solid #2980b9; border-radius: 0 30px 30px 0; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .search-btn:hover { background-color: #34495e; border-color: #34495e; }
+
+        .research-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; }
+        .paper-card { background: #ffffff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s ease; display: flex; flex-direction: column; border-top: 4px solid #27ae60; }
+        .paper-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .paper-title { font-size: 1.2rem; color: #2c3e50; margin-top: 0; margin-bottom: 10px; line-height: 1.4; }
+        .paper-authors { font-size: 0.9rem; color: #555; margin-bottom: 10px; font-style: italic; }
+        .paper-journal { font-size: 0.85rem; background-color: #e8f8f5; color: #16a085; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 15px; font-weight: bold; }
+        
+        .button-group { display: flex; gap: 10px; margin-top: auto; }
+        .read-btn { flex: 1; text-decoration: none; background-color: #2980b9; color: white; text-align: center; padding: 10px; border-radius: 6px; font-weight: bold; transition: background 0.3s ease; font-size: 0.9rem;}
+        .read-btn:hover { background-color: #1a5276; }
+        
+        /* AI Button Styling */
+        .ai-btn { flex: 1; background-color: #8e44ad; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 0.9rem;}
+        .ai-btn:hover { background-color: #732d91; }
+
+        .loading { text-align: center; font-size: 1.2rem; color: #7f8c8d; grid-column: 1 / -1; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="research.html">Latest Research</a>
+    </nav>
+
+    <div class="header-section">
+        <h1>Smart Biotech Research Hub</h1>
+        <p>Search papers and generate instant AI study notes.</p>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="E.g., CRISPR, Tissue Culture, Nanoparticles..." onkeypress="handleKeyPress(event)">
+        <button class="search-btn" onclick="executeSearch()">Search</button>
+    </div>
+
+    <div id="research-container" class="research-grid">
+        <p class="loading">Loading latest research...</p>
+    </div>
+
+    <script>
+        // Default load
+        window.onload = () => fetchLatestResearch('Plant Biotechnology OR Nanobiotechnology');
+
+        // Handle Enter key in search box
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                executeSearch();
+            }
+        }
+
+        // Search trigger
+        function executeSearch() {
+            const query = document.getElementById('searchInput').value;
+            if(query.trim() !== "") {
+                fetchLatestResearch(query);
+            } else {
+                fetchLatestResearch('Plant Biotechnology OR Nanobiotechnology');
+            }
+        }
+
+        async function fetchLatestResearch(searchQuery) {
+            const container = document.getElementById('research-container');
+            container.innerHTML = '<p class="loading">Searching databases...</p>';
+
+            const formattedQuery = encodeURIComponent(searchQuery); 
+            const apiUrl = `https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=${formattedQuery}&format=json&resultType=lite&pageSize=12&sort_date=y`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                displayPapers(data.resultList.result);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                container.innerHTML = '<p class="loading">Failed to load papers. Please check your connection.</p>';
+            }
+        }
+
+        function displayPapers(papers) {
+            const container = document.getElementById('research-container');
+            let html = '';
+
+            if(papers.length === 0) {
+                container.innerHTML = '<p class="loading">No papers found for this topic.</p>';
+                return;
+            }
+
+            papers.forEach(paper => {
+                const title = paper.title ? paper.title.replace(/'/g, "\\'") : 'Untitled Paper';
+                const authors = paper.authorString ? paper.authorString : 'Unknown Authors';
+                const journal = paper.journalTitle || 'Unknown Journal';
+                const year = paper.pubYear || '';
+                const link = paper.doi ? `https://doi.org/${paper.doi}` : `https://europepmc.org/article/MED/${paper.pmid}`;
+
+                html += `
+                    <div class="paper-card">
+                        <h3 class="paper-title">${paper.title}</h3>
+                        <p class="paper-authors">${authors}</p>
+                        <div><span class="paper-journal">${journal} ${year ? `(${year})` : ''}</span></div>
+                        
+                        <div class="button-group">
+                            <a href="${link}" target="_blank" class="read-btn">Read Paper</a>
+                            <button onclick="useAI('${title}')" class="ai-btn">🧠 AI Summary</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // AI Feature Logic
+        function useAI(paperTitle) {
+            // Highly optimized prompt for exam prep and research
+            const promptText = `Act as an expert in Biotechnology. I am currently reviewing a research paper titled: "${paperTitle}". 
+
+Please provide:
+1. A very concise summary of the main discovery.
+2. The key methodologies used (e.g., dry-lab or wet-lab techniques).
+3. Important takeaways that would be highly relevant for a researcher focusing on Plant Biotechnology, and specifically highlight points useful for someone preparing for competitive exams like CSIR NET Life Science or DBT-BET.`;
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(promptText).then(() => {
+                alert("✅ AI Prompt copied to your clipboard!\n\nClick OK to open Google Gemini. Just paste (Ctrl+V) the text there to get your smart study notes.");
+                // Opens AI tool in a new tab
+                window.open('https://gemini.google.com/', '_blank');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                alert("Error copying text. Please try again.");
+            });
+        }
+    </script>
+
+</body>
+</html>
