@@ -26,7 +26,7 @@
         .network-section h2 { font-size: 2.5rem; margin-bottom: 50px; color: #27ae60; }
         
         .ecosystem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1000px; margin: auto; }
-        .brand-card { padding: 40px 30px; border-radius: 20px; text-align: left; transition: transform 0.3s ease; position: relative; overflow: hidden; }
+        .brand-card { padding: 40px 30px; border-radius: 20px; text-align: left; transition: transform 0.3s ease; position: relative; overflow: hidden; display: flex; flex-direction: column;}
         .brand-card:hover { transform: translateY(-10px); }
         
         .notes-hub { background: linear-gradient(145deg, #e8f8f5, #d1f2eb); border-left: 6px solid #1abc9c; }
@@ -35,22 +35,29 @@
         .brand-card h3 { font-size: 1.8rem; margin-top: 0; margin-bottom: 15px; }
         .notes-hub h3 { color: #16a085; }
         .launch-pad h3 { color: #2980b9; }
-        .brand-card p { font-size: 1.05rem; line-height: 1.7; color: #444; }
-        .brand-badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; }
+        .brand-card p { font-size: 1.05rem; line-height: 1.7; color: #444; margin-bottom: 25px; flex-grow: 1;}
+        .brand-badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; align-self: flex-start;}
         .badge-notes { background-color: #1abc9c; color: white; }
         .badge-launch { background-color: #3498db; color: white; }
+        
+        /* Direct Website Buttons */
+        .visit-btn { display: inline-block; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; text-align: center; transition: 0.3s; }
+        .visit-notes { background-color: #16a085; color: white; }
+        .visit-notes:hover { background-color: #117a65; }
+        .visit-launch { background-color: #2980b9; color: white; }
+        .visit-launch:hover { background-color: #1f618d; }
 
         /* Research Domains Section */
         .domains-section { padding: 60px 20px; max-width: 1200px; margin: auto; text-align: center; }
         .domains-section h2 { font-size: 2.2rem; margin-bottom: 40px; color: #2c3e50; }
-        .domain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
-        .domain-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-bottom: 4px solid #27ae60; }
-        .domain-card h4 { font-size: 1.2rem; color: #27ae60; margin-top: 0; }
-        .domain-card p { font-size: 0.95rem; color: #666; }
+        .domain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .domain-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-bottom: 4px solid #27ae60; text-align: left; transition: transform 0.3s ease;}
+        .domain-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1);}
+        .domain-card h4 { font-size: 1.25rem; color: #27ae60; margin-top: 0; margin-bottom: 10px;}
+        .domain-card p { font-size: 0.95rem; color: #555; margin: 0; line-height: 1.5;}
 
         /* Footer */
         footer { background-color: #2c3e50; color: #bdc3c7; text-align: center; padding: 30px; margin-top: 40px; font-size: 0.95rem; }
-    </footer>
     </style>
 </head>
 <body>
@@ -65,7 +72,7 @@
 
     <div class="hero">
         <h1>Smart Literature Search for Life Sciences</h1>
-        <p>Accelerate your literature review. Search the latest publications in Plant Biotechnology, Nanobiotechnology, and beyond. Generate instant AI-powered study notes directly from Europe PMC databases.</p>
+        <p>Accelerate your literature review. Search the latest publications across all major biotechnology domains. Generate instant AI-powered study notes directly from Europe PMC databases.</p>
         <a href="research.html" class="hero-btn">🔍 Search Research Papers Now</a>
     </div>
 
@@ -77,12 +84,14 @@
                 <span class="brand-badge badge-notes">Core Life Sciences</span>
                 <h3>BiotechNotesHub</h3>
                 <p>Your premium repository for core biological concepts. Whether you are mastering secondary metabolite production, diving into plant tissue culture, or preparing for high-stakes exams like CSIR NET, DBT-BET, and GATE BT, this hub provides structured, easy-to-understand study materials.</p>
+                <a href="https://biotechnoteshub.blogspot.com/p/home.html" target="_blank" class="visit-btn visit-notes">Visit BiotechNotesHub ➔</a>
             </div>
 
             <div class="brand-card launch-pad">
                 <span class="brand-badge badge-launch">Career & Development</span>
                 <h3>BioLaunchPad</h3>
                 <p>Designed to bridge the gap between academic learning and a successful research career. Discover resources for Ph.D. guidance, dry-lab computational biology skills, and professional development tools tailored for upcoming scientific innovators.</p>
+                <a href="https://www.biolaunchpad.online/p/home.html" target="_blank" class="visit-btn visit-launch">Visit BioLaunchPad ➔</a>
             </div>
 
         </div>
@@ -93,19 +102,35 @@
         <div class="domain-grid">
             <div class="domain-card">
                 <h4>🌱 Plant Biotechnology</h4>
-                <p>Focusing on tissue culture, genetic engineering, and agricultural innovations.</p>
+                <p>Focusing on plant tissue culture, genetic engineering, transgenics, and sustainable agricultural innovations.</p>
             </div>
             <div class="domain-card">
                 <h4>🔬 Nanobiotechnology</h4>
-                <p>Bridging nanomaterials with biological systems for advanced applications.</p>
+                <p>Bridging nanomaterials with biological systems for targeted drug delivery, diagnostics, and biosensors.</p>
             </div>
             <div class="domain-card">
-                <h4>🧪 Secondary Metabolites</h4>
-                <p>Extraction and analysis of high-value compounds from plant systems.</p>
+                <h4>💻 Computational Biology & Bioinformatics</h4>
+                <p>Integrating dry-lab techniques, genomics, proteomics, and modern data analysis in life sciences.</p>
             </div>
             <div class="domain-card">
-                <h4>💻 Computational Biology</h4>
-                <p>Integrating dry-lab techniques and bioinformatics for modern data analysis.</p>
+                <h4>🧬 Molecular Biology & Genetics</h4>
+                <p>Exploring DNA/RNA mechanisms, CRISPR-Cas9 genome editing, and recombinant DNA technology.</p>
+            </div>
+            <div class="domain-card">
+                <h4>🏭 Industrial Biotechnology</h4>
+                <p>Bioprocess engineering, fermentation technology, and large-scale secondary metabolite production.</p>
+            </div>
+            <div class="domain-card">
+                <h4>🏥 Medical & Healthcare Biotech</h4>
+                <p>Advancements in immunology, vaccine development, stem cell therapy, and personalized medicine.</p>
+            </div>
+            <div class="domain-card">
+                <h4>🌍 Environmental Biotechnology</h4>
+                <p>Bioremediation, waste management, and developing eco-friendly biofuels using microbial systems.</p>
+            </div>
+            <div class="domain-card">
+                <h4>🦠 Microbiology & Virology</h4>
+                <p>Study of microbial genetics, host-pathogen interactions, and applied industrial microbiology.</p>
             </div>
         </div>
     </div>
@@ -116,5 +141,3 @@
 
 </body>
 </html>
-
-
